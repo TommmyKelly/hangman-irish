@@ -13,11 +13,11 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
-            background-color: #f0f0f0;
         }
 
         #game-container {
             text-align: center;
+            color: #000;
         }
 
         #hangman {
@@ -65,8 +65,44 @@
             background-color: #45a049;
         }
 
-        /* Media Query for larger screens (min-width: 600px) */
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+        }
 
+        .modal-content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 20px;
+        }
+
+        .close-button {
+            width: auto;
+            padding: 8px 16px;
+            font-size: 1em;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .close-button:hover {
+            background-color: #45a049;
+        }
+
+        /* Media Query for larger screens (min-width: 600px) */
         @media only screen and (min-width: 600px) {
             #keyboard {
                 grid-template-columns: repeat(5, 1fr);
@@ -86,9 +122,17 @@
     <div id="game-container">
         <div id="hangman">Hangman</div>
         <div id="word-display"></div>
-        <div id="incorrect-attempts">Incorrect Attempts: 0 of 6</div>
+        <div id="incorrect-attempts">Incorrect Attempts: 0</div>
         <div id="incorrect-guesses">Incorrect Guesses: </div>
         <div id="keyboard"></div>
+    </div>
+
+    <!-- Modal -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <p id="modal-message"></p>
+            <button class="close-button" onclick="closeModal()">Close</button>
+        </div>
     </div>
 
     <script>
@@ -131,8 +175,8 @@
                     incorrectAttempts++;
 
                     // Update hangman display
-                    //document.getElementById('hangman').innerText = `Hangman: ${incorrectAttempts}`;
-                    document.getElementById('incorrect-attempts').innerText = `Incorrect Attempts: ${incorrectAttempts} of 6`;
+                    document.getElementById('hangman').innerText = `Hangman: ${incorrectAttempts}`;
+                    document.getElementById('incorrect-attempts').innerText = `Incorrect Attempts: ${incorrectAttempts}`;
 
                     // Update incorrect guesses display
                     incorrectGuesses.push(letter);
@@ -141,23 +185,29 @@
 
                 // Check if the player has won
                 if (!displayWord.includes('_')) {
-                    setTimeout(() => {
-                        alert('Congratulations! You guessed the word!');
-                        resetGame();
-                    }, 500);
+                    showModal('Congratulations! You guessed the word!');
                 }
 
                 // Check if the player has lost
                 if (incorrectAttempts === 6) {
-                    setTimeout(() => {
-                        alert(`Sorry, you lost. The correct word was "${selectedWord}"`);
-                        resetGame();
-                    }, 500);
+                    showModal(`Sorry, you lost. The correct word was "${selectedWord}"`);
                 }
 
                 // Disable the clicked button
                 button.disabled = true;
             }
+        }
+
+        // Function to show the modal with a message
+        function showModal(message) {
+            document.getElementById('modal-message').innerText = message;
+            document.getElementById('myModal').style.display = 'flex';
+        }
+
+        // Function to close the modal
+        function closeModal() {
+            document.getElementById('myModal').style.display = 'none';
+            resetGame();
         }
 
         // Function to reset the game
@@ -178,7 +228,7 @@
             document.getElementById('hangman').innerText = 'Hangman';
 
             // Reset incorrect attempts display
-            document.getElementById('incorrect-attempts').innerText = 'Incorrect Attempts: 0 of 6';
+            document.getElementById('incorrect-attempts').innerText = 'Incorrect Attempts: 0';
 
             // Reset incorrect guesses display
             document.getElementById('incorrect-guesses').innerText = 'Incorrect Guesses:';
