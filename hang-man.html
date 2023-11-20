@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hangman Game</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+
+        #game-container {
+            text-align: center;
+            color: #000;
+        }
+
+        #hangman {
+            font-size: 2em;
+        }
+
+        #word-display {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+
+        #incorrect-attempts {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        #incorrect-guesses {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        #keyboard {
+            display: grid;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        button {
+            width: 40px;
+            height: 40px;
+            margin: 5px;
+            font-size: 1em;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:disabled {
+            background-color: #aaa;
+            cursor: not-allowed;
+        }
+
+        button:hover:enabled {
+            background-color: #45a049;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+        }
+
+        .modal-content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 20px;
+        }
+
+        .close-button {
+            width: auto;
+            padding: 8px 16px;
+            font-size: 1em;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .close-button:hover {
+            background-color: #45a049;
+        }
+
+        a {
+            text-decoration: none;
+            color: #333;
+            font-size: 20px;
+            padding: 10px;
+            margin: 10px;
+            display: inline-block;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        a:hover {
+            background-color: #ddd;
+        }
+
+        /* Media Query for larger screens (min-width: 600px) */
+        @media only screen and (min-width: 600px) {
+            #keyboard {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+
+        @media only screen and (max-width: 600px) {
+            #keyboard {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="game-container">
+        <div id="hangman">Hangman</div>
+        <div id="word-display"></div>
+        <div id="incorrect-attempts">Incorrect Attempts: 0 of 6</div>
+        <div id="incorrect-guesses">Incorrect Guesses: </div>
+        <div id="keyboard"></div>
+        <a href="Index.html">Home</a>
+    </div>
+
+    <!-- Modal -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <p id="modal-message"></p>
+            <button class="close-button" onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // List of Irish words
+        const words = ["craic", "fáilte", "gaelige", "sláinte", "ceol", "cúpla", "pota", "madra", "saoire"];
+
+        // Select a random word from the list
+        let selectedWord = words[Math.floor(Math.random() * words.length)];
+
+        // Initialize variables
+        let guessedLetters = [];
+        let incorrectAttempts = 0;
+        let incorrectGuesses = [];
+
+        // Display underscores for each letter in the word
+        let displayWord = selectedWord.split('').map(letter => guessedLetters.includes(letter) ? letter : '_').join(' ');
+        document.getElementById('word-display').innerText = displayWord;
+
+        // Create buttons for each letter of the Irish alphabet (both uppercase and lowercase, with fada)
+        const irishAlphabet = "aábcdeéfghiílmnoóprstuú";
+        for (let i = 0; i < irishAlphabet.length; i++) {
+            const letter = irishAlphabet[i];
+            const button = document.createElement('button');
+            button.innerText = letter;
+            button.addEventListener('click', () => handleGuess(letter, button));
+            document.getElementById('keyboard').appendChild(button);
+        }
+
+        // Function to handle a guessed letter
+        function handleGuess(letter, button) {
+            if (!guessedLetters.includes(letter)) {
+                guessedLetters.push(letter);
+
+                // Update displayWord with guessed letters
+                displayWord = selectedWord.split('').map(letter => guessedLetters.includes(letter) ? letter : '_').join(' ');
+                document.getElementById('word-display').innerText = displayWord;
+
+                // Check if the guessed letter is incorrect
+                if (!selectedWord.includes(letter)) {
+                    incorrectAttempts++;
+
+                    // Update hangman display
+                    //document.getElementById('hangman').innerText = `Hangman: ${incorrectAttempts}`;
+                    document.getElementById('incorrect-attempts').innerText = `Incorrect Attempts: ${incorrectAttempts} of 6`;
+
+                    // Update incorrect guesses display
+                    incorrectGuesses.push(letter);
+                    document.getElementById('incorrect-guesses').innerText = `Incorrect Guesses: ${incorrectGuesses.join(', ')}`;
+                }
+
+                // Check if the player has won
+                if (!displayWord.includes('_')) {
+                    showModal('Congratulations! You guessed the word!');
+                }
+
+                // Check if the player has lost
+                if (incorrectAttempts === 6) {
+                    showModal(`Sorry, you lost. The correct word was "${selectedWord}"`);
+                }
+
+                // Disable the clicked button
+                button.disabled = true;
+            }
+        }
+
+        // Function to show the modal with a message
+        function showModal(message) {
+            document.getElementById('modal-message').innerText = message;
+            document.getElementById('myModal').style.display = 'flex';
+        }
+
+        // Function to close the modal
+        function closeModal() {
+            document.getElementById('myModal').style.display = 'none';
+            resetGame();
+        }
+
+        // Function to reset the game
+        function resetGame() {
+            // Reset variables
+            guessedLetters = [];
+            incorrectAttempts = 0;
+            incorrectGuesses = [];
+
+            // Select a new random word
+            selectedWord = words[Math.floor(Math.random() * words.length)];
+
+            // Display underscores for each letter in the new word
+            displayWord = selectedWord.split('').map(letter => guessedLetters.includes(letter) ? letter : '_').join(' ');
+            document.getElementById('word-display').innerText = displayWord;
+
+            // Reset hangman display
+            document.getElementById('hangman').innerText = 'Hangman';
+
+            // Reset incorrect attempts display
+            document.getElementById('incorrect-attempts').innerText = 'Incorrect Attempts: 0 of 6';
+
+            // Reset incorrect guesses display
+            document.getElementById('incorrect-guesses').innerText = 'Incorrect Guesses:';
+
+            // Enable all buttons
+            const buttons = document.querySelectorAll('button');
+            buttons.forEach(button => {
+                button.disabled = false;
+            });
+        }
+    </script>
+
+</body>
+
+</html>

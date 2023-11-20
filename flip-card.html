@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Irish Flip Card Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="flip-card" id="card">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <p id="irishWord">Irish Word</p>
+                </div>
+                <div class="flip-card-back">
+                    <p id="englishTranslation">English Translation</p>
+                </div>
+            </div>
+        </div>
+
+        <button onclick="showTranslation()">Show Translation</button>
+
+        <div class="button-container">
+            <button id="previousButton" onclick="showPrevious()">Previous</button>
+            <button id="nextButton" onclick="showNext()">Next</button>
+        </div>
+        <a href="Index.html">Home</a>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
