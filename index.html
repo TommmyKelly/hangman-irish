@@ -37,6 +37,7 @@
         #incorrect-guesses {
             font-size: 1.2em;
             margin-bottom: 20px;
+            display: none;
         }
 
         #keyboard {
@@ -122,7 +123,7 @@
     <div id="game-container">
         <div id="hangman">Hangman</div>
         <div id="word-display"></div>
-        <div id="incorrect-attempts">Incorrect Attempts: 0</div>
+        <div id="incorrect-attempts">Incorrect Attempts: 0 of 6</div>
         <div id="incorrect-guesses">Incorrect Guesses: </div>
         <div id="keyboard"></div>
     </div>
@@ -152,7 +153,7 @@
         document.getElementById('word-display').innerText = displayWord;
 
         // Create buttons for each letter of the Irish alphabet (both uppercase and lowercase, with fada)
-        const irishAlphabet = "aábcdeéfgiílmnoópqrstuú";
+        const irishAlphabet = "aábcdeéfghiílmnoóprstuú";
         for (let i = 0; i < irishAlphabet.length; i++) {
             const letter = irishAlphabet[i];
             const button = document.createElement('button');
@@ -175,8 +176,8 @@
                     incorrectAttempts++;
 
                     // Update hangman display
-                    document.getElementById('hangman').innerText = `Hangman: ${incorrectAttempts}`;
-                    document.getElementById('incorrect-attempts').innerText = `Incorrect Attempts: ${incorrectAttempts}`;
+                    //document.getElementById('hangman').innerText = `Hangman: ${incorrectAttempts}`;
+                    document.getElementById('incorrect-attempts').innerText = `Incorrect Attempts: ${incorrectAttempts} of 6`;
 
                     // Update incorrect guesses display
                     incorrectGuesses.push(letter);
@@ -228,7 +229,7 @@
             document.getElementById('hangman').innerText = 'Hangman';
 
             // Reset incorrect attempts display
-            document.getElementById('incorrect-attempts').innerText = 'Incorrect Attempts: 0';
+            document.getElementById('incorrect-attempts').innerText = 'Incorrect Attempts: 0 of 6';
 
             // Reset incorrect guesses display
             document.getElementById('incorrect-guesses').innerText = 'Incorrect Guesses:';
