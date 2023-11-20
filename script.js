@@ -29,28 +29,32 @@ function showWord() {
   nextButton.disabled = currentWordIndex === words.length - 1;
 }
 
-function showPrevious() {
-  currentWordIndex = Math.max(0, currentWordIndex - 1);
-  showWord();
-}
+// function showPrevious() {
+//   currentWordIndex = Math.max(0, currentWordIndex - 1);
+//   showWord();
 
-function showNext() {
-  currentWordIndex = Math.min(words.length - 1, currentWordIndex + 1);
-  showWord();
-}
+// }
 
-function showTranslation() {
-  currentWordIndex = (currentWordIndex + 1) % words.length;
-  showWord();
-}
+// function showNext() {
+//   currentWordIndex = Math.min(words.length - 1, currentWordIndex + 1);
+//   showWord();
+
+// }
+
+// function showTranslation() {
+//   currentWordIndex = (currentWordIndex + 1) % words.length;
+//   showWord();
+// }
 
 function showPrevious() {
   currentWordIndex = (currentWordIndex - 1 + words.length) % words.length;
+  resetCard();
   showWord();
 }
 
 function showNext() {
   currentWordIndex = (currentWordIndex + 1) % words.length;
+  resetCard();
   showWord();
 }
 
@@ -58,6 +62,13 @@ function showTranslation() {
   // Toggle the class to apply or remove the flip effect
   const card = document.getElementById("card");
   card.classList.toggle("flip-card-flipped");
+}
+
+function resetCard() {
+  const card = document.getElementById("card");
+  if (Array.from(card.classList).includes("flip-card-flipped")) {
+    card.classList.toggle("flip-card-flipped");
+  }
 }
 
 document.addEventListener("DOMContentLoaded", showWord);
