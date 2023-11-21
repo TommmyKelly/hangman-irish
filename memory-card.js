@@ -65,10 +65,10 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // Shuffle the cards after a short delay
-  setTimeout(() => {
-    const cards = document.querySelectorAll(".card");
-    cards.forEach((card) => card.classList.remove("flipped"));
-  }, 2000);
+  //   setTimeout(() => {
+  //     const cards = document.querySelectorAll(".card");
+  //     cards.forEach((card) => card.classList.remove("flipped"));
+  //   }, 2000);
 
   function flipCard() {
     if (lockBoard) return;

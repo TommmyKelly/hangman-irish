@@ -46,6 +46,11 @@ div.back {
   font-size: 30px;
 }
 
+.card div.front {
+  background-color: #ddd;
+  color: #333;
+}
+
 .card.flipped div.back {
   transform: rotateY(180deg);
 }
