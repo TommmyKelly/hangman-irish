@@ -58,6 +58,9 @@ div.back {
 
 @media (max-width: 600px) {
   .memory-game {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .frame {
+    height: 100%;
   }
 }
