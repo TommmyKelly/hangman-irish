@@ -1,12 +1,9 @@
 body {
-  font-family: "Arial", sans-serif;
-  margin: 0;
+  /* font-family: "Arial", sans-serif;
+  margin: auto;
   padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   height: 100vh;
-  background-color: #f4f4f4;
+  background-color: #f4f4f4; */
 }
 
 .memory-game {
@@ -14,10 +11,11 @@ body {
   grid-template-columns: repeat(4, 1fr);
   gap: 10px;
   max-width: 600px;
+  margin: auto;
 }
 
 .card {
-  width: 80px;
+  /* width: 80px; */
   height: 120px;
   cursor: pointer;
   position: relative;
@@ -56,11 +54,31 @@ div.back {
   visibility: hidden;
 }
 
+a {
+  text-decoration: none;
+  text-align: center;
+  color: #333;
+  font-size: 20px;
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  display: inline-block;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+a:hover {
+  background-color: #ddd;
+}
+
 @media (max-width: 600px) {
   .memory-game {
     grid-template-columns: repeat(3, 1fr);
   }
   .frame {
-    height: 100vh;
+    /* height: 100vh; */
+    height: -webkit-fill-available;
   }
 }
